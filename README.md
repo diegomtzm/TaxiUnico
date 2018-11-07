@@ -2,6 +2,7 @@
 Proyecto Análisis y Modelación de Sistemas de Software
 Aplicación Web para el administrador y móvil para el cliente y el taxista
 
+![alt text](https://raw.githubusercontent.com/diegomtzm/TaxiUnico/master/img-readme/historial.png)
 ## Prerrequisitos
 * Python 3.7
 * Django 2.1
