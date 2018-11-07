@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-12 text-center">
+            <h1 class="display-1">Reservas</h1>
+        </div>
+    </div>
+    {% for viaje in viajes %}
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <div class="card shadow p-3 mb-3 bg-white rounded">
+                <h5 class="card-header">{{ viaje.fecha }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Origen</h5>
+                    <p class="card-text">{{ viaje.origen }}</p>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Destino</h5>
+                    <p class="card-text">{{ viaje.destino }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock content %}
