@@ -21,6 +21,13 @@ viajes = [
     }
 ]
 
+user = {
+    'nombre' : 'Hector',
+    'apellido' : 'De Luna',
+    'edad' : 20,
+    'viajes' : 341,
+}
+
 # Create your views here.
 def home(request):
     return render(request, 'main/index.html')
@@ -36,3 +43,9 @@ def historial(request):
         'viajes' : viajes
     }
     return render(request,'main/historial.html',context)
+
+def perfil(request):
+    context = {
+        'user' : user
+    }
+    return render(request,'main/perfil.html',context)
