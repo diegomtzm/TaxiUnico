@@ -88,3 +88,7 @@ local_settings.py
 config.py
 __pycache__
 .ipynb_checkpoints
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
