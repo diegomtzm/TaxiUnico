@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Viaje
 from main.forms import TaxiForm
+from django.contrib import messages
 from django.contrib.auth.models import User
 import config
 
@@ -63,5 +64,11 @@ def perfil(request):
     return render(request,'main/perfil.html',context)
 
 def encuesta(request):
-    form = TaxiForm()
+    if request.method == 'POST':
+        form = TaxiForm(request.POST)
+        if form.is_valid():
+            messages.success(request, f'Gracias por contestar la encuesta!')
+            return redirect('home-main')
+    else:
+        form = TaxiForm()
     return render(request, 'main/encuesta.html', {'form': form})
