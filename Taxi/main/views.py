@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Viaje
+from main.forms import TaxiForm
 from django.contrib.auth.models import User
 import config
 
@@ -60,3 +61,7 @@ def perfil(request):
         'user' : user
     }
     return render(request,'main/perfil.html',context)
+
+def encuesta(request):
+    form = TaxiForm()
+    return render(request, 'main/encuesta.html', {'form': form})
