@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-from django.shortcuts import render, redirect
-from .models import Viaje
-from main.forms import TaxiForm
-from django.contrib import messages
-=======
 from django.shortcuts import render
 from .models import Viaje, Taxi
 from .models import Boleto
 
->>>>>>> Changes
 from django.contrib.auth.models import User
 import config
 
