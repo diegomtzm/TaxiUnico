@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 from django.shortcuts import render, redirect
 from .models import Viaje
 from main.forms import TaxiForm
 from django.contrib import messages
+=======
+from django.shortcuts import render
+from .models import Viaje, Taxi
+from .models import Boleto
+
+>>>>>>> Changes
 from django.contrib.auth.models import User
 import config
 
@@ -41,7 +48,8 @@ def home(request):
 
     context = {
         'user' : username,
-        'api' : config.api_key
+        'api' : config.api_key,
+        'taxista' : Taxi.objects.first()
     }
     return render(request, 'main/index.html',context)
 
@@ -72,3 +80,10 @@ def encuesta(request):
     else:
         form = TaxiForm()
     return render(request, 'main/encuesta.html', {'form': form})
+
+def boletos(request):
+    context = {
+        'boletos' : Boleto.objects.filter(user_fk=request.user.id)
+    }
+
+    return render(request,'main/boletos.html',context)

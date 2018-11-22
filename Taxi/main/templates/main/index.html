@@ -43,7 +43,7 @@ function autoRefresh(map, pathCoords) {
 
 function getDirections(map) {
     var directionsService = new google.maps.DirectionsService();
-
+    pedirTaxi();
     var request = {
         origin: new google.maps.LatLng(25.65625138, -100.2956101),
         destination: new google.maps.LatLng(25.65122232, -100.28962341),
@@ -56,25 +56,44 @@ function getDirections(map) {
     });
 }
 
+function pedirTaxi() {
+    $('#taxista').removeClass('invisible');
+    $('#taxista').addClass('visible');
+    $('#taxista').addClass('animated bounceInUp slow');
+}
 
 </script>
 <div id="map"></div>
 
 <div class="container">
     <br>
-    <div class="row justify-content-center">
-        <div class="col-md-6" style="position:absolute; z-index:99;">
-                <label class="sr-only" for="inlineFormInputGroup">Direccion</label>
-                <div class="input-group mb-2">
-                  <div class="input-group-prepend">
+    <div class="row justify-content-center animated bounceInUp delay-1s slow">
+        <div class="col-md-6 top-absolute">
+            <label class="sr-only" for="inlineFormInputGroup">Direccion</label>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
-                  </div>
-                  <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Direccion" onchange="getDirections(map_global);">
+                </div>
+                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Direccion" onchange="getDirections(map_global);">
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center invisible">
+        <div class="col-sm-6 footer" id="taxista">
+                <div class="card shadow p-3 mb-4 bg-white rounded">
+                    <div class="col-md-2">
+                        <img class="card-img-top" src="https://www.bsn.eu/wp-content/uploads/2016/12/user-icon-image-placeholder-300-grey.jpg" alt="Card image cap" stlye="height:50%;">
+                    </div>
+                    <div class="col-md-10">
+                        <h5 class="card-title">{{ taxista.marca }} {{ taxista.modelo }}</h5>
+                        <p class="card-text">{{ taxista.t_nombre }} {{ taxista.t_apellido }} - {{ taxista.placas }}</p>
+                    </div>
                 </div>
         </div>
     </div>
 
-<!--    <div class="row justify-content-center">
+    <!--    <div class="row justify-content-center">
         <div class="col-sm-12 text-center">
             <h1 class="display-1">Taxi</h1>
         </div>

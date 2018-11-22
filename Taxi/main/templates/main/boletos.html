@@ -1,0 +1,35 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-12 text-center">
+                <h1 class="display-1">Boletos</h1>
+        </div>
+    </div>
+    {% for boleto in boletos %}
+    <div class="row align-items-center">
+        <div class="col-sm-6 offset-3">
+            <div class="card-group">
+                <div class="card shadow p-3 mb-4 bg-white rounded">
+                    <div class="card-body">
+                        <div class="col-sm-6">
+                        <h5 class="card-title">Origen</h5>
+                        <p class="card-text">{{ boleto.origen }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h5 class="card-title">Destino</h5>
+                        <p class="card-text">{{ boleto.destino }}</p>
+                    </div>
+                    </div>
+                    <div class="card-footer">
+                        <i class="fas fa-money-bill" style="color:rgb(0, 0, 0);"></i> ${{ viaje.costo }}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor %}
+</div>
+{% endblock content %}

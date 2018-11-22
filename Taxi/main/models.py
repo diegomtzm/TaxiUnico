@@ -36,3 +36,8 @@ class Viaje(models.Model):
  #   class Meta:
   #      model = Taxi
    #     fields = ['pregunta1', 'pregunta2', 'pregunta3']
+
+class Boleto(models.Model):
+    origen = models.CharField(max_length=100)
+    destino = models.CharField(max_length=100)
+    user_fk = models.ForeignKey(User,on_delete=models.CASCADE)
