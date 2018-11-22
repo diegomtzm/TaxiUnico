@@ -6,9 +6,6 @@ urlpatterns = [
     path('reservas', views.reservas, name='reservas-main'),
     path('historial', views.historial, name='historial-main'),
     path('perfil', views.perfil, name='perfil-main'),
-<<<<<<< HEAD
     path('encuesta', views.encuesta, name='encuesta-main'),
-=======
     path('boletos', views.boletos, name='boletos-main'),
->>>>>>> Changes
 ]
