@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+from datetime import datetime
 
 RESPUESTAS= (
     ('bueno', 'Bueno'),
@@ -26,12 +27,12 @@ class Taxi(models.Model):
 # Create your models here.
 class Viaje(models.Model):
     tipo_vehiculo = models.CharField(max_length=100)
-    fecha = models.DateTimeField('date published')
+    fecha = models.DateTimeField(default=datetime.now, blank=True)
     destino = models.CharField(max_length=200)
     origen = models.CharField(max_length=200)
     taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE)
     user_fk = models.ForeignKey(User,on_delete=models.CASCADE)
-
+    costo = models.IntegerField(default=0)
 #class TaxiForm(ModelForm):
  #   class Meta:
   #      model = Taxi

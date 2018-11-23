@@ -11,13 +11,17 @@
     <div class="row align-items-center">
         <div class="col-sm-6 offset-3">
             <div class="card box-shadow h-md-250 text-center">
-            <div class="list-group">
-                {% for viaje in viajes %}
-                <a href="{% url 'viaje-detail' viaje.id %}" class="list-group-item list-group-item-action">{{ viaje.fecha }} <i class="fas fa-money-bill" style="color:rgb(0, 0, 0);"></i> ${{ viaje.costo }}</a>
-                {%endfor %}
+                <p class="card-header">{{ object.fecha }} - <i class="fas fa-money-bill" style="color:rgb(0, 0, 0);"></i>
+                    ${{ object.costo }} </p>
+                <div class="card-body">
+                    <h1>
+                        {{ object.origen }}
+                    </h1>
+                    <h1>
+                        {{ object.destino }}
+                    </h1>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock content %}
+    {% endblock content %}

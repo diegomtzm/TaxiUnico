@@ -43,10 +43,11 @@ function autoRefresh(map, pathCoords) {
 
 function getDirections(map) {
     var directionsService = new google.maps.DirectionsService();
-    pedirTaxi();
+
+
     var request = {
-        origin: new google.maps.LatLng(25.65625138, -100.2956101),
-        destination: new google.maps.LatLng(25.65122232, -100.28962341),
+        origin: new google.maps.LatLng(25.64923743, -100.28853416),
+        destination: new google.maps.LatLng(25.65628503, -100.29567832),
         travelMode: google.maps.TravelMode.DRIVING
     };
     directionsService.route(request, function(result, status) {
@@ -56,44 +57,55 @@ function getDirections(map) {
     });
 }
 
-function pedirTaxi() {
-    $('#taxista').removeClass('invisible');
-    $('#taxista').addClass('visible');
-    $('#taxista').addClass('animated bounceInUp slow');
-}
-
 </script>
+
+
+
 <div id="map"></div>
 
 <div class="container">
     <br>
+    <form method="post" data-pedir-taxi="{% url 'pedir_taxi' %}">
     <div class="row justify-content-center animated bounceInUp delay-1s slow">
-        <div class="col-md-6 top-absolute">
-            <label class="sr-only" for="inlineFormInputGroup">Direccion</label>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
+        <div class="col-sm-6">
+                <label class="sr-only" for="inlineFormInputGroup">Direccion</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
+                    </div>
+                    <input id="origen" name="origen" type="text" class="form-control" id="inlineFormInputGroup" placeholder="Direccion" onchange="getDirections(map_global);">
                 </div>
-                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Direccion" onchange="getDirections(map_global);">
+                <label class="sr-only" for="inlineFormInputGroup">Estacion</label>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-bus"></i></div>
+                    </div>
+                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Transpais Monterrey Terminal Sur" readonly>
+                    <input type="hidden" name="destino" id="destino" class="form-control" id="inlineFormInputGroup" value="Transpais Monterrey Terminal Sur">
+
+                </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+<div class="row justify-content-center invisible">
+    <div class="col-sm-6 footer" id="taxista">
+        <div class="card shadow p-3 mb-4 bg-white rounded">
+            <div class="col-md-2">
+                <img class="card-img-top" src="https://www.bsn.eu/wp-content/uploads/2016/12/user-icon-image-placeholder-300-grey.jpg"
+                    alt="Card image cap" stlye="height:50%;">
+            </div>
+            <div class="col-md-10">
+                <h5 id="modelo" class="card-title"></h5>
+                <p id="nombre_placas" class="card-text"></p>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row justify-content-center invisible">
-        <div class="col-sm-6 footer" id="taxista">
-                <div class="card shadow p-3 mb-4 bg-white rounded">
-                    <div class="col-md-2">
-                        <img class="card-img-top" src="https://www.bsn.eu/wp-content/uploads/2016/12/user-icon-image-placeholder-300-grey.jpg" alt="Card image cap" stlye="height:50%;">
-                    </div>
-                    <div class="col-md-10">
-                        <h5 class="card-title">{{ taxista.marca }} {{ taxista.modelo }}</h5>
-                        <p class="card-text">{{ taxista.t_nombre }} {{ taxista.t_apellido }} - {{ taxista.placas }}</p>
-                    </div>
-                </div>
-        </div>
-    </div>
 
-    <!--    <div class="row justify-content-center">
+<!--    <div class="row justify-content-center">
         <div class="col-sm-12 text-center">
             <h1 class="display-1">Taxi</h1>
         </div>
@@ -125,3 +137,23 @@ function pedirTaxi() {
 </div>
 
 {% endblock content %}
+{% block javascript %}
+<script>
+        $("#origen").change(function () {
+          var form = $(this).closest("form");
+          $.ajax({
+            url: form.attr("data-pedir-taxi"),
+            data: form.serialize(),
+            dataType: 'json',
+            success: function (data) {
+                $('#taxista').removeClass('invisible');
+                $('#taxista').addClass('visible');
+                $('#taxista').addClass('animated bounceInUp slow');
+                $('#nombre_placas').text(data.nombre + " " + data.apellido + " - " + data.placas);
+                $('#modelo').text(data.marca + " " + data.modelo);
+            }
+          });
+
+        });
+</script>
+{% endblock %}
