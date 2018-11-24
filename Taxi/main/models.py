@@ -28,6 +28,7 @@ class Taxi(models.Model):
 class Viaje(models.Model):
     tipo_vehiculo = models.CharField(max_length=100)
     fecha = models.DateTimeField(default=datetime.now, blank=True)
+    fecha_terminacion = models.DateTimeField(default=datetime.now,blank=True)
     destino = models.CharField(max_length=200)
     origen = models.CharField(max_length=200)
     taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE)

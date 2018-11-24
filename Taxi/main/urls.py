@@ -11,4 +11,5 @@ urlpatterns = [
     path('encuesta', views.encuesta, name='encuesta-main'),
     path('boletos', views.boletos, name='boletos-main'),
     path('ajax/pedir_taxi', views.pedir_taxi, name='pedir_taxi'),
+    path('ajax/acabar_viaje', views.acabar_viaje, name='acabar_viaje'),
 ]

@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 import config
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from datetime import datetime, timezone
+import math
 
 @login_required
 # Create your views here.
@@ -122,7 +124,37 @@ def pedir_taxi(request):
         'apellido' : taxi.t_apellido,
         'modelo' : taxi.modelo,
         'marca' : taxi.marca,
-        'placas' : taxi.placas
+        'placas' : taxi.placas,
+        'viaje_id' : viaje_usuario.id
+    }
+
+    return JsonResponse(data)
+
+def acabar_viaje(request):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user
+
+    # obtiene el id de un AJAX post request
+    viaje = request.GET.get('viaje_id',None)
+
+    # filtra los viajes con el id y lo toma de la base de datos
+    viaje_usuario = Viaje.objects.get(id=viaje)
+    # guarda el momento que se acabo el viaje
+    viaje_usuario.fecha_terminacion = datetime.now(timezone.utc)
+
+    # obtiene la diferencia del tiempo
+    timediff = viaje_usuario.fecha_terminacion.timestamp() - viaje_usuario.fecha.timestamp()
+    # calcula el costo total
+    costo_total = math.floor(timediff * 0.8)
+    # guarda el costo
+    viaje_usuario.costo = costo_total
+
+    # guarda todos los cambios
+    viaje_usuario.save()
+
+    data = {
+        'costo' : costo_total
     }
 
     return JsonResponse(data)
