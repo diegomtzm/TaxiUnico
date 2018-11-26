@@ -51,7 +51,6 @@ function autoRefresh(map, pathCoords) {
 function getDirections(map) {
     var directionsService = new google.maps.DirectionsService();
 
-
     var request = {
         origin: new google.maps.LatLng(25.64923743, -100.28853416),
         destination: new google.maps.LatLng(25.65628503, -100.29567832),
@@ -81,10 +80,10 @@ function getDirections(map) {
                         <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
                     </div>
                     <input id="origen" name="origen" type="text" class="form-control" id="inlineFormInputGroup"
-                        placeholder="Direccion" onchange="getDirections(map_global);">
+                        placeholder="Dirección" onchange="getDirections(map_global);">
                 </div>
                 <label class="sr-only" for="inlineFormInputGroup">Estacion</label>
-                <div class="input-group mb-0">
+                <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text"><i class="fas fa-bus"></i></div>
                     </div>
@@ -93,6 +92,15 @@ function getDirections(map) {
                     <input type="hidden" name="destino" id="destino" class="form-control" id="inlineFormInputGroup"
                         value="Transpais Monterrey Terminal Sur">
                     <input type="hidden" name="viaje_id" id="viaje_id" class="form-control">
+                </div>
+                <label class="sr-only" for="inlineFormInputGroup">Personas</label>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-users"></i></div>
+                    </div>
+                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Cantidad de personas"
+                        readonly>
+                    <input id="cant_personas" name="cant_personas" type="number" min="1" max="7" value="1">
                 </div>
             </div>
         </div>
