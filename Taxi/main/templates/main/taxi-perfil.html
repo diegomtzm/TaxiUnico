@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-12 text-center">
+            <h1 class="display-1">Perfil</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <div class="card shadow p-3 mb-3 bg-white rounded">
+                <h5 class="card-header">Perfil de {{ user.first_name }} {{ user.last_name }}   <a href="/historial" class="btn btn-primary">Configuracion</a></h5>
+                <div class="card-body">
+                    <h5 class="card-title">Email</h5>
+                    <p class="card-text">{{ user.email }}</p>
+                    <h5 class="card-title">Viajes Completados</h5>
+                    <p class="card-text">{{ user.viajes }}</p>
+                    <a href="/taxi/historial" class="btn btn-primary">Ver viajes completados</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
