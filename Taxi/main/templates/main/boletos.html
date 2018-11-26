@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-12 text-center">
+            <h1 class="display-1">Boletos</h1>
+        </div>
+    </div>
+
+
+
+    {% for boleto in boletos %}
+    <div class="row align-items-center">
+        <div class="col-sm-6 offset-3">
+            <div class="card-group">
+                <div class="card flex-md-row mb-4 box-shadow h-md-250 text-center">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                            <h5 class="mb-0 card-text">{{ boleto.origen }} </h5>
+                            <i class="fas fa-arrow-down fa-lg" style="color:rgb(0, 0, 0);"></i>
+                            <h5>{{boleto.destino}}</h5>
+                        <a href="/" class="btn btn-primary">Usar boleto</a>
+                    </div>
+                    <span class="d-flex flex-row-reverse bd-highlight align-items-center" style="border-left-style: dotted;">
+                        <span style="margin: 0px 40px 0px 40px;">
+                        <h1>27</h1>
+                        <h5>Nov</h5>
+                        </span>
+                    <span>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{%endfor %}
+</div>
+{% endblock content %}

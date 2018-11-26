@@ -33,20 +33,28 @@ function autoRefresh(map, pathCoords) {
 
     marker=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/red.png"});
 
+    timeToWait = 700 * (pathCoords.length);
+
     for (i = 0; i < pathCoords.length; i++) {
         setTimeout(function(coords) {
             route.getPath().push(coords);
             moveMarker(map, marker, coords);
         }, 700 * i, pathCoords[i]);
     }
+
+    setTimeout(function(){
+    acaba_viaje();
+  }, timeToWait);
+
 }
 
 function getDirections(map) {
     var directionsService = new google.maps.DirectionsService();
 
+
     var request = {
-        origin: new google.maps.LatLng(25.65625138, -100.2956101),
-        destination: new google.maps.LatLng(25.65122232, -100.28962341),
+        origin: new google.maps.LatLng(25.64923743, -100.28853416),
+        destination: new google.maps.LatLng(25.65628503, -100.29567832),
         travelMode: google.maps.TravelMode.DRIVING
     };
     directionsService.route(request, function(result, status) {
@@ -56,23 +64,110 @@ function getDirections(map) {
     });
 }
 
-
 </script>
+
+
+
 <div id="map"></div>
 
 <div class="container">
     <br>
-    <div class="row justify-content-center">
-        <div class="col-md-6" style="position:absolute; z-index:99;">
+    <form method="post" data-pedir-taxi="{% url 'pedir_taxi' %}">
+        <div class="row justify-content-center animated bounceInUp delay-1s slow">
+            <div class="col-sm-6">
                 <label class="sr-only" for="inlineFormInputGroup">Direccion</label>
                 <div class="input-group mb-2">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
-                  </div>
-                  <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Direccion" onchange="getDirections(map_global);">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-map-marker-alt"></i></div>
+                    </div>
+                    <input id="origen" name="origen" type="text" class="form-control" id="inlineFormInputGroup"
+                        placeholder="Direccion" onchange="getDirections(map_global);">
                 </div>
+                <label class="sr-only" for="inlineFormInputGroup">Estacion</label>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-bus"></i></div>
+                    </div>
+                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Transpais Monterrey Terminal Sur"
+                        readonly>
+                    <input type="hidden" name="destino" id="destino" class="form-control" id="inlineFormInputGroup"
+                        value="Transpais Monterrey Terminal Sur">
+                    <input type="hidden" name="viaje_id" id="viaje_id" class="form-control">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row justify-content-center invisible">
+    <div class="col-sm-6 footer" id="taxista">
+        <div class="card shadow p-3 mb-4 bg-white rounded">
+            <div class="col-md-2">
+                <img class="card-img-top" src="https://www.bsn.eu/wp-content/uploads/2016/12/user-icon-image-placeholder-300-grey.jpg"
+                    alt="Card image cap" stlye="height:50%;">
+            </div>
+            <div class="col-md-10">
+                <h5 id="modelo" class="card-title"></h5>
+                <p id="nombre_placas" class="card-text"></p>
+            </div>
         </div>
     </div>
+</div>
+
+
+<div class="modal fade" id="finalDelViaje" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Resumen viaje</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center">
+                    <div class="col-sm-12">
+                        <div class="card shadow p-3 mb-4 bg-white rounded">
+                            <div class="col-md-2">
+                                <img class="card-img-top" src="https://www.bsn.eu/wp-content/uploads/2016/12/user-icon-image-placeholder-300-grey.jpg"
+                                    alt="Card image cap" stlye="height:50%;">
+                            </div>
+                            <div class="col-md-10">
+                                <h5 id="modelo_modal" class="card-title"></h5>
+                                <p id="nombre_placas_modal" class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3>
+                            Tecnologico de Monterrey
+                        </h3>
+                    </div>
+                    <div class="col-md-1">
+                        <i class="fas fa-arrow-right fa-2x" style="vertical-align: middle;"></i>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>
+                            Transpais
+                        </h3>
+                    </div>
+                    <div class="col-md-2">
+                        <h4>$<span id="costo">39.00</span></h4>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!--    <div class="row justify-content-center">
         <div class="col-sm-12 text-center">
@@ -106,3 +201,43 @@ function getDirections(map) {
 </div>
 
 {% endblock content %}
+{% block javascript %}
+<script>
+    $("#origen").change(function () {
+        var form = $(this).closest("form");
+        $.ajax({
+            url: form.attr("data-pedir-taxi"),
+            data: form.serialize(),
+            dataType: 'json',
+            success: function (data) {
+                $('#taxista').removeClass('invisible');
+                $('#taxista').addClass('visible');
+                $('#taxista').addClass('animated bounceInUp slow');
+                $('#nombre_placas').text(data.nombre + " " + data.apellido + " - " + data.placas);
+                $('#modelo').text(data.marca + " " + data.modelo);
+                $('#nombre_placas_modal').text(data.nombre + " " + data.apellido + " - " + data.placas);
+                $('#modelo_modal').text(data.marca + " " + data.modelo);
+                $('#viaje_id').val(data.viaje_id);
+            }
+        });
+
+    });
+    $("#finalDelViaje").modal()
+
+    function acaba_viaje() {
+        $.ajax({
+            url: "{% url 'acabar_viaje' %}",
+            data: {
+                'viaje_id': $('#viaje_id').val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#taxista').removeClass('animated bounceInUp slow');
+                $('#taxista').addClass('animated bounceOutDown slow');
+                $('#costo').text(data.costo);
+                $("#finalDelViaje").modal()
+            }
+        });
+    }
+</script>
+{% endblock %}
