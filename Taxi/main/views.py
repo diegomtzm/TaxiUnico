@@ -151,8 +151,8 @@ def pedir_taxi(request):
     elif pasajeros > 5 and pasajeros <= 7:
         taxi = Taxi.objects.get(cant_personas=7)
     elif pasajeros >= 8:
-        taxi = Taxi.objects.get(cant_personas=10) 
-    
+        taxi = Taxi.objects.get(cant_personas=10)
+
     origen_user = request.GET.get('origen',None)
     destino_user = request.GET.get('destino',None)
 
@@ -185,6 +185,8 @@ def acabar_viaje(request):
 
     # obtiene la diferencia del tiempo
     timediff = viaje_usuario.fecha_terminacion.timestamp() - viaje_usuario.fecha.timestamp()
+    diff = viaje_usuario.fecha_terminacion - viaje_usuario.fecha
+
     # calcula el costo total
     costo_total = math.floor(timediff * 0.8)
     # guarda el costo
@@ -193,8 +195,15 @@ def acabar_viaje(request):
     # guarda todos los cambios
     viaje_usuario.save()
 
+    days, seconds = diff.days, diff.seconds
+    hours = days * 24 + seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+
+    tiempo_total = str(minutes) + ":" + str(seconds)
     data = {
-        'costo' : costo_total
+        'costo' : costo_total,
+        'tiempo_total' : tiempo_total
     }
 
     return JsonResponse(data)
