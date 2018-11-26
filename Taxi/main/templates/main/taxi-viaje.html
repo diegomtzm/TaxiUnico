@@ -10,7 +10,7 @@ function initMap() {
       disableDefaultUI: true
     });
     map_global = map;
-    //getDirections(map);
+    getDirections(map);
 }
 
 function moveMarker(map, marker, latlng) {
@@ -67,8 +67,6 @@ function getDirections(map) {
 
 </script>
 <div id="map"></div>
-
-<body onload="getDirections(map_global);"></body>
 
     <div class="modal fade" id="finalDelViaje" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
