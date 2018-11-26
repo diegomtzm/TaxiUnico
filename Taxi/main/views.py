@@ -164,7 +164,6 @@ def acabar_viaje(request):
 
     return JsonResponse(data)
 
-<<<<<<< HEAD
 
 # Signup
 def signup(request):
@@ -180,7 +179,6 @@ def signup(request):
         form_class = UserRegisterForm
 
     return render(request,'main/signup.html',{'form' : form_class })
-=======
 # Views for the taxi driver
 def taxi(request):
     username = None
@@ -213,4 +211,3 @@ def taxi_perfil(request):
         'user' : username
     }
     return render(request,'main/taxi-perfil.html',context)
->>>>>>> ccd7701d8f8faf460b166a23ba635591c218403e
