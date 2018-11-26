@@ -25,11 +25,13 @@ def home(request):
     if request.user.is_authenticated:
         username = request.user
 
+    form = TaxiForm()
 
     context = {
         'user' : username,
         'api' : config.api_key,
-        'taxista' : Taxi.objects.first()
+        'taxista' : Taxi.objects.first(),
+        'form' : form
     }
     return render(request, 'main/index.html',context)
 '''
@@ -130,7 +132,8 @@ def pedir_taxi(request):
         'modelo' : taxi.modelo,
         'marca' : taxi.marca,
         'placas' : taxi.placas,
-        'viaje_id' : viaje_usuario.id
+        'viaje_id' : viaje_usuario.id,
+        'taxi_id' : taxi.id
     }
 
     return JsonResponse(data)
@@ -180,6 +183,7 @@ def signup(request):
 
     return render(request,'main/signup.html',{'form' : form_class })
 # Views for the taxi driver
+@taxi_required
 def taxi(request):
     username = None
     if request.user.is_authenticated:
@@ -189,19 +193,19 @@ def taxi(request):
         'user' : username
     }
     return render(request, 'main/taxi-main.html', context)
-
+@taxi_required
 def taxi_viaje(request):
     context = {
         'api' : config.api_key
     }
     return render(request, 'main/taxi-viaje.html',context)
-
+@taxi_required
 def taxi_historial(request):
     context = {
         'viajes' : Viaje.objects.filter(user_fk=request.user.id)
     }
     return render(request,'main/taxi-historial.html',context)
-
+@taxi_required
 def taxi_perfil(request):
     username = None
     if request.user.is_authenticated:

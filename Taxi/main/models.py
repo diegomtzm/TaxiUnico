@@ -29,8 +29,8 @@ class Viaje(models.Model):
     fecha_terminacion = models.DateTimeField(default=datetime.now,blank=True)
     destino = models.CharField(max_length=200)
     origen = models.CharField(max_length=200)
-    taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE,related_name='taxi')
-    user_fk = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='user')
+    taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE,related_name='taxi_viaje')
+    user_fk = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='user_viaje')
     costo = models.IntegerField(default=0)
 #class TaxiForm(ModelForm):
  #   class Meta:
@@ -41,3 +41,10 @@ class Boleto(models.Model):
     origen = models.CharField(max_length=100)
     destino = models.CharField(max_length=100)
     user_fk = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+
+class Encuesta(models.Model):
+    taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE,related_name='taxi_encuesta')
+    user_fk = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='user_encuesta')
+    pregunta1 = models.IntegerField(default=0)
+    pregunta2 = models.IntegerField(default=0)
+    pregunta3 = models.IntegerField(default=0)

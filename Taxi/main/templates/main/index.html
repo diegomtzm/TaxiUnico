@@ -1,4 +1,5 @@
 {% extends "main/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 <script>
     var map_global;
@@ -101,11 +102,13 @@ function getDirections(map) {
 
 <div class="row justify-content-center invisible">
     <div class="col-sm-6 footer" id="taxista">
+
         <div class="card shadow p-3 mb-4 bg-white rounded">
             <div class="col-md-2">
                 <img class="card-img-top" src="https://www.bsn.eu/wp-content/uploads/2016/12/user-icon-image-placeholder-300-grey.jpg"
                     alt="Card image cap" stlye="height:50%;">
             </div>
+            <input type="hidden" name="taxi_id" id="taxi_id" class="form-control">
             <div class="col-md-10">
                 <h5 id="modelo" class="card-title"></h5>
                 <p id="nombre_placas" class="card-text"></p>
@@ -157,11 +160,29 @@ function getDirections(map) {
                         <h4>$<span id="costo">39.00</span></h4>
                     </div>
                 </div>
-
+                <div class="border-top pt-3">
+                </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card shadow p-3 mb-3 bg-white rounded">
+                                <h5 class="card-header">Encuesta de Servicio</h5>
+                                <div class="card-body">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <fieldset class="form-group">
+                                            {{ form|crispy }}
+                                        </fieldset>
+                                        <div class="form-group">
+                                            <button class="btn btn-outline-info" type="submit">Enviar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -217,6 +238,7 @@ function getDirections(map) {
                 $('#modelo').text(data.marca + " " + data.modelo);
                 $('#nombre_placas_modal').text(data.nombre + " " + data.apellido + " - " + data.placas);
                 $('#modelo_modal').text(data.marca + " " + data.modelo);
+                $('#taxi_id').val(data.taxi_id);
                 $('#viaje_id').val(data.viaje_id);
             }
         });
@@ -236,6 +258,23 @@ function getDirections(map) {
                 $('#taxista').addClass('animated bounceOutDown slow');
                 $('#costo').text(data.costo);
                 $("#finalDelViaje").modal()
+            }
+        });
+    }
+
+    function mandar_encuesta() {
+        $.ajax({
+            url: "{% url 'encuesta' %}",
+            data: {
+                'viaje_id': $('#viaje_id').val(),
+                'pregunta_1' : $('#id_pregunta1').val(),
+                'pregunta_2' : $('#id_pregunta2').val(),
+                'pregunta_3' : $('#id_pregunta3').val(),
+                'taxi_fk' : $('#taxi_id').val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#finalDelViaje").modal('hide')
             }
         });
     }
