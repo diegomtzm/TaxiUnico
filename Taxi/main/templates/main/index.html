@@ -101,7 +101,8 @@ function getDirections(map) {
                     </div>
                     <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Cantidad de personas"
                         readonly>
-                    <input id="cant_personas" name="cant_personas" type="number" min="1" max="10" value="1">
+                    <input id="cant_personas" name="cant_personas" class="form-control" type="number" min="1" max="10" 
+                        value="1">
                 </div>
             </div>
         </div>
@@ -242,9 +243,9 @@ function getDirections(map) {
                 $('#taxista').removeClass('invisible');
                 $('#taxista').addClass('visible');
                 $('#taxista').addClass('animated bounceInUp slow');
-                $('#nombre_placas').text(data.nombre + " " + data.apellido + " - " + data.placas);
+                $('#nombre_placas').text(data.nombre + " " + data.apellido + " | " + data.placas);
                 $('#modelo').text(data.marca + " " + data.modelo);
-                $('#nombre_placas_modal').text(data.nombre + " " + data.apellido + " - " + data.placas);
+                $('#nombre_placas_modal').text(data.nombre + " " + data.apellido + " | " + data.placas);
                 $('#modelo_modal').text(data.marca + " " + data.modelo);
                 $('#taxi_id').val(data.taxi_id);
                 $('#viaje_id').val(data.viaje_id);
@@ -272,7 +273,7 @@ function getDirections(map) {
 
     function mandar_encuesta() {
         $.ajax({
-            url: "{% url 'encuesta' %}",
+            url: "{% url 'encuesta-main' %}",
             data: {
                 'viaje_id': $('#viaje_id').val(),
                 'pregunta_1' : $('#id_pregunta1').val(),
