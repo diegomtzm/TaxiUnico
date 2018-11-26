@@ -12,4 +12,8 @@ urlpatterns = [
     path('boletos', views.boletos, name='boletos-main'),
     path('ajax/pedir_taxi', views.pedir_taxi, name='pedir_taxi'),
     path('ajax/acabar_viaje', views.acabar_viaje, name='acabar_viaje'),
+    path('taxi', views.taxi, name='taxi-main'),
+    path('taxi/viaje', views.taxi_viaje, name='taxi-viaje'),
+    path('taxi/historial', views.taxi_historial, name='taxi-historial'),
+    path('taxi/perfil', views.taxi_perfil, name='taxi-perfil'),
 ]

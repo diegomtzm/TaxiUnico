@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-12 text-center">
+            <h2 class="display-1">Bienvenido</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <div class="card shadow p-3 mb-3 bg-white rounded">
+                <h5 class="card-header">Nueva solicitud de viaje!</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Dirección de origen</h5>
+                    <p class="card-text">Tecnológico de Monterrey</p>
+                    <h5 class="card-title">Dirección destino</h5>
+                    <p class="card-text">Transpais Monterrey Terminal Sur</p>
+                    <a href="/taxi/viaje" class="btn btn-primary">Aceptar viaje</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
