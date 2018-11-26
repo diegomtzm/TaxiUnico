@@ -1,7 +1,8 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.forms import ModelForm
-from django.contrib.auth.models import User
 from datetime import datetime
+from django.conf import settings
 
 RESPUESTAS= (
     ('bueno', 'Bueno'),
@@ -9,10 +10,10 @@ RESPUESTAS= (
     ('malo', 'Malo'),
 )
 
+
 class Taxi(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     prom_encuestas = models.IntegerField(default=0)
-    t_nombre = models.CharField(max_length=200)
-    t_apellido = models.CharField(max_length=200)
     marca = models.CharField(max_length=200)
     modelo = models.CharField(max_length=200)
     placas = models.CharField(max_length=200)
@@ -21,9 +22,6 @@ class Taxi(models.Model):
     #pregunta2 = models.CharField(max_length=10, choices=RESPUESTAS)
     #pregunta3 = models.CharField(max_length=10, choices=RESPUESTAS)
 
-    def __str__(self):
-        return self.t_nombre
-
 # Create your models here.
 class Viaje(models.Model):
     tipo_vehiculo = models.CharField(max_length=100)
@@ -31,8 +29,8 @@ class Viaje(models.Model):
     fecha_terminacion = models.DateTimeField(default=datetime.now,blank=True)
     destino = models.CharField(max_length=200)
     origen = models.CharField(max_length=200)
-    taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE)
-    user_fk = models.ForeignKey(User,on_delete=models.CASCADE)
+    taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE,related_name='taxi')
+    user_fk = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='user')
     costo = models.IntegerField(default=0)
 #class TaxiForm(ModelForm):
  #   class Meta:
@@ -42,4 +40,4 @@ class Viaje(models.Model):
 class Boleto(models.Model):
     origen = models.CharField(max_length=100)
     destino = models.CharField(max_length=100)
-    user_fk = models.ForeignKey(User,on_delete=models.CASCADE)
+    user_fk = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)

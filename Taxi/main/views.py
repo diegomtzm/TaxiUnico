@@ -6,12 +6,17 @@ from django.shortcuts import render
 from .models import Viaje, Taxi
 from .models import Boleto
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+User = get_user_model()
 import config
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from datetime import datetime, timezone
 import math
+from .decorators import taxi_required
+from .forms import UserRegisterForm
 
 @login_required
 # Create your views here.
@@ -115,13 +120,13 @@ def pedir_taxi(request):
     origen_user = request.GET.get('origen',None)
     destino_user = request.GET.get('destino',None)
 
-    viaje_usuario = Viaje.objects.create(origen=origen_user,destino=destino_user,user_fk=username,costo=40,taxi_fk=taxi)
+    viaje_usuario = Viaje.objects.create(origen=origen_user,destino=destino_user,user_fk=username,costo=0,taxi_fk=taxi)
 
 
 
     data = {
-        'nombre' : taxi.t_nombre,
-        'apellido' : taxi.t_apellido,
+        'nombre' : taxi.user.first_name,
+        'apellido' : taxi.user.last_name,
         'modelo' : taxi.modelo,
         'marca' : taxi.marca,
         'placas' : taxi.placas,
@@ -158,3 +163,19 @@ def acabar_viaje(request):
     }
 
     return JsonResponse(data)
+
+
+# Signup
+def signup(request):
+    if request.method == 'POST':
+        form_class = UserRegisterForm(request.POST)
+        if form_class.is_valid():
+            form_class.save()
+            username = form_class.cleaned_data.get('username')
+            messages.success(request, f'Tu cuenta se a registrado!')
+            return redirect('home-main')
+
+    else:
+        form_class = UserRegisterForm
+
+    return render(request,'main/signup.html',{'form' : form_class })
