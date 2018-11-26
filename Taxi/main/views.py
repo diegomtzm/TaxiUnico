@@ -117,14 +117,19 @@ def pedir_taxi(request):
     if request.user.is_authenticated:
         username = request.user
 
-    taxi = Taxi.objects.order_by("?").first()
+    pasajeros = int(request.GET.get('cant_personas', None))
 
+    if pasajeros <= 4:
+        taxi = Taxi.objects.get(cant_personas=4)
+    elif pasajeros > 5 and pasajeros <= 7:
+        taxi = Taxi.objects.get(cant_personas=7)
+    elif pasajeros >= 8:
+        taxi = Taxi.objects.get(cant_personas=10) 
+    
     origen_user = request.GET.get('origen',None)
     destino_user = request.GET.get('destino',None)
 
     viaje_usuario = Viaje.objects.create(origen=origen_user,destino=destino_user,user_fk=username,costo=0,taxi_fk=taxi)
-
-
 
     data = {
         'nombre' : taxi.user.first_name,

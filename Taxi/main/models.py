@@ -18,8 +18,7 @@ class Taxi(models.Model):
                                        MaxValueValidator(10)])
     marca = models.CharField(max_length=200)
     modelo = models.CharField(max_length=200)
-    cant_personas = models.IntegerField(default=4, validators=[MinValueValidator(4),
-                                       MaxValueValidator(10)])
+    cant_personas = models.IntegerField(default=4, choices=[(4,"4"),(7, "7"),(10,"10")])
     placas = models.CharField(max_length=200)
     lista_permisos = models.BooleanField(max_length=200)
     #pregunta1 = models.CharField(max_length=10, choices=RESPUESTAS)

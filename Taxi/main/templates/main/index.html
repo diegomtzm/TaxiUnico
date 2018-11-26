@@ -272,7 +272,7 @@ function getDirections(map) {
 
     function mandar_encuesta() {
         $.ajax({
-            url: "{% url 'encuesta' %}",
+            url: "{% url 'encuesta-main' %}",
             data: {
                 'viaje_id': $('#viaje_id').val(),
                 'pregunta_1' : $('#id_pregunta1').val(),
