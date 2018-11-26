@@ -72,7 +72,7 @@ function getDirections(map) {
 
 <div class="container">
     <br>
-    <form method="post" data-pedir-taxi="{% url 'pedir_taxi' %}">
+    <form id="Navigation" method="post" data-pedir-taxi="{% url 'pedir_taxi' %}">
         <div class="row justify-content-center animated bounceInUp delay-1s slow">
             <div class="col-sm-6">
                 <label class="sr-only" for="inlineFormInputGroup">Direccion</label>
@@ -101,7 +101,7 @@ function getDirections(map) {
                     </div>
                     <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Cantidad de personas"
                         readonly>
-                    <input id="cant_personas" name="cant_personas" class="form-control" type="number" min="1" max="10" 
+                    <input id="cant_personas" name="cant_personas" class="form-control" type="number" min="1" max="10"
                         value="1">
                 </div>
             </div>
@@ -176,15 +176,18 @@ function getDirections(map) {
                             <div class="card shadow p-3 mb-3 bg-white rounded">
                                 <h5 class="card-header">Encuesta de Servicio</h5>
                                 <div class="card-body">
-                                    <form method="POST">
-                                        {% csrf_token %}
+                                    <form method="POST" id="Encuesta">
                                         <fieldset class="form-group">
+                                                {% csrf_token %}
+
+                                                <input type="hidden" type="number" name="taxi_id" id="taxi_id" class="form-control" value="1">
+
                                             {{ form|crispy }}
                                         </fieldset>
                                         <div class="form-group">
-                                            <button class="btn btn-outline-info" type="submit">Enviar</button>
                                         </div>
                                     </form>
+                                    <button class="btn btn-outline-info" id="Encuesta_Submit">Enviar</button>
                                 </div>
                             </div>
                         </div>
@@ -234,7 +237,7 @@ function getDirections(map) {
 {% block javascript %}
 <script>
     $("#origen").change(function () {
-        var form = $(this).closest("form");
+        var form = $('#Navigation');
         $.ajax({
             url: form.attr("data-pedir-taxi"),
             data: form.serialize(),
@@ -271,21 +274,18 @@ function getDirections(map) {
         });
     }
 
-    function mandar_encuesta() {
+    $( "#Encuesta_Submit" ).click(function() {
+        var form = $('#Encuesta');
         $.ajax({
             url: "{% url 'encuesta-main' %}",
-            data: {
-                'viaje_id': $('#viaje_id').val(),
-                'pregunta_1' : $('#id_pregunta1').val(),
-                'pregunta_2' : $('#id_pregunta2').val(),
-                'pregunta_3' : $('#id_pregunta3').val(),
-                'taxi_fk' : $('#taxi_id').val()
-            },
+            type: "POST",
+            data: form.serialize(),
             dataType: 'json',
             success: function (data) {
-                $("#finalDelViaje").modal('hide')
+                $("#finalDelViaje").modal('hide');
+                console.log(json);
             }
         });
-    }
+    });
 </script>
 {% endblock %}

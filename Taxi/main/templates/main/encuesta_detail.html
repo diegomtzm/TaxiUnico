@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-12 text-center">
+            <h1 class="display-1">Encuesta {{ object.id }}</h1>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-sm-6 offset-3">
+            <div class="card box-shadow h-md-250 text-center">
+                <p class="card-header">{{ object.fecha }}</i>
+                 </p>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                                <legend class="border-bottom mb-4">¿Como califica el tiempo de llegada del servicio?</legend>
+
+                                <h3>{{ object.pregunta1 }}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-12">
+                                    <legend class="border-bottom mb-4">¿Como califica la atencion del conductor?</legend>
+
+                                    <h3> {{ object.pregunta2 }}</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+                                        <legend class="border-bottom mb-4">¿Como califica la limpieza del vehículo?</legend>
+
+                                        <h3>{{ object.pregunta3 }}</h3>
+                                </div>
+                            </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}

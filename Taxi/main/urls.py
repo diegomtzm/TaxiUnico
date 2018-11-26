@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ViajeListView, ViajeDetailView
+from .views import ViajeListView, ViajeDetailView, EncuestaListView, EncuestaDetailView
 from . import views
 
 urlpatterns = [
@@ -18,4 +18,6 @@ urlpatterns = [
     path('taxi/viaje', views.taxi_viaje, name='taxi-viaje'),
     path('taxi/historial', views.taxi_historial, name='taxi-historial'),
     path('taxi/perfil', views.taxi_perfil, name='taxi-perfil'),
+    path('taxi/encuesta', EncuestaListView.as_view(), name='taxi-encuesta-main'),
+    path('taxi/encuesta/<int:pk>/', EncuestaDetailView.as_view(), name='taxi-encuesta-detail'),
 ]

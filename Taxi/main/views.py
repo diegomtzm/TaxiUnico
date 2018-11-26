@@ -3,7 +3,7 @@ from .models import Viaje
 from main.forms import TaxiForm
 from django.contrib import messages
 from django.shortcuts import render
-from .models import Viaje, Taxi
+from .models import Viaje, Taxi, Encuesta
 from .models import Boleto
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 from django.contrib.auth.forms import UserCreationForm
@@ -89,16 +89,43 @@ def perfil(request):
     }
     return render(request,'main/perfil.html',context)
 
-@login_required
 def encuesta(request):
     if request.method == 'POST':
+        data = {
+            'guarda' : 'mm'
+        }
         form = TaxiForm(request.POST)
         if form.is_valid():
+            prom = 0
+            if (form.cleaned_data['pregunta1'] == "bueno"):
+                prom += 1.66
+            elif (form.cleaned_data['pregunta1'] == "regular"):
+                prom += 0.83
+
+            if (form.cleaned_data['pregunta2'] == "bueno"):
+                prom += 1.66
+            elif (form.cleaned_data['pregunta2'] == "regular"):
+                prom += 0.83
+
+            if (form.cleaned_data['pregunta3'] == "bueno"):
+                prom += 1.66
+            elif (form.cleaned_data['pregunta3'] == "regular"):
+                prom += 0.83
+
+            model_instance = form.save(commit=False)
+            model_instance.taxi_fk = Taxi.objects.get(id=request.POST.get("taxi_id"))
+            model_instance.user_fk = request.user
+
+            model_instance.promedio = prom
+            model_instance.save()
             messages.success(request, f'Gracias por contestar la encuesta!')
-            return redirect('home-main')
+
+            return JsonResponse(data)
     else:
         form = TaxiForm()
-    return render(request, 'main/encuesta.html', {'form': form})
+
+    return JsonResponse(data)
+
 
 @login_required
 def boletos(request):
@@ -207,7 +234,7 @@ def taxi_viaje(request):
 @taxi_required
 def taxi_historial(request):
     context = {
-        'viajes' : Viaje.objects.filter(user_fk=request.user.id)
+        'viajes' : Viaje.objects.filter(taxi_fk=request.user.taxi)
     }
     return render(request,'main/taxi-historial.html',context)
 @taxi_required
@@ -220,3 +247,12 @@ def taxi_perfil(request):
         'user' : username
     }
     return render(request,'main/taxi-perfil.html',context)
+
+class EncuestaListView(ListView):
+    model = Encuesta
+    template_name = 'main/taxi-encuesta.html'
+    context_object_name = 'encuestas'
+    ordering = ['-fecha']
+
+class EncuestaDetailView(DetailView):
+    model = Encuesta
