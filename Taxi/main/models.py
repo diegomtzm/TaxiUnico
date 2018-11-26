@@ -3,6 +3,7 @@ from django.db import models
 from django.forms import ModelForm
 from datetime import datetime
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 RESPUESTAS= (
     ('bueno', 'Bueno'),
@@ -13,9 +14,12 @@ RESPUESTAS= (
 
 class Taxi(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    prom_encuestas = models.IntegerField(default=0)
+    prom_encuestas = models.IntegerField(default=5, validators=[MinValueValidator(0),
+                                       MaxValueValidator(10)])
     marca = models.CharField(max_length=200)
     modelo = models.CharField(max_length=200)
+    cant_personas = models.IntegerField(default=4, validators=[MinValueValidator(4),
+                                       MaxValueValidator(10)])
     placas = models.CharField(max_length=200)
     lista_permisos = models.BooleanField(max_length=200)
     #pregunta1 = models.CharField(max_length=10, choices=RESPUESTAS)
