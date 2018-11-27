@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL = 'boletos-main'
+LOGIN_REDIRECT_URL = 'home-main'
 LOGOUT_REDIRECT_URL = 'login'
 # Application definition
 
