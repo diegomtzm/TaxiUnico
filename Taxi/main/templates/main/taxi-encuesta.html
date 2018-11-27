@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-sm-12 text-center">
+            <h1 class="display-1">Encuesta</h1>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-sm-6 offset-3">
+            <div class="card box-shadow h-md-250 text-center">
+            <div class="list-group">
+                {% for encuesta in encuestas %}
+                <a href="{% url 'taxi-encuesta-detail' encuesta.id %}" class="list-group-item list-group-item-action">{{ encuesta.fecha }} - <i class="fas fa-star"></i> {{encuesta.promedio}}</i></a>
+                {%endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

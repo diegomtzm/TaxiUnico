@@ -3,7 +3,7 @@ from .models import Viaje
 from main.forms import TaxiForm
 from django.contrib import messages
 from django.shortcuts import render
-from .models import Viaje, Taxi
+from .models import Viaje, Taxi, Encuesta
 from .models import Boleto
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 from django.contrib.auth.forms import UserCreationForm
@@ -90,16 +90,43 @@ def perfil(request):
     
     return render(request,'main/perfil.html',context)
 
-@login_required
 def encuesta(request):
     if request.method == 'POST':
+        data = {
+            'guarda' : 'mm'
+        }
         form = TaxiForm(request.POST)
         if form.is_valid():
+            prom = 0
+            if (form.cleaned_data['pregunta1'] == "bueno"):
+                prom += 1.66
+            elif (form.cleaned_data['pregunta1'] == "regular"):
+                prom += 0.83
+
+            if (form.cleaned_data['pregunta2'] == "bueno"):
+                prom += 1.66
+            elif (form.cleaned_data['pregunta2'] == "regular"):
+                prom += 0.83
+
+            if (form.cleaned_data['pregunta3'] == "bueno"):
+                prom += 1.66
+            elif (form.cleaned_data['pregunta3'] == "regular"):
+                prom += 0.83
+
+            model_instance = form.save(commit=False)
+            model_instance.taxi_fk = Taxi.objects.get(id=request.POST.get("taxi_id"))
+            model_instance.user_fk = request.user
+
+            model_instance.promedio = prom
+            model_instance.save()
             messages.success(request, f'Gracias por contestar la encuesta!')
-            return redirect('home-main')
+
+            return JsonResponse(data)
     else:
         form = TaxiForm()
-    return render(request, 'main/encuesta.html', {'form': form})
+
+    return JsonResponse(data)
+
 
 @login_required
 def boletos(request):
@@ -125,8 +152,8 @@ def pedir_taxi(request):
     elif pasajeros > 5 and pasajeros <= 7:
         taxi = Taxi.objects.get(cant_personas=7)
     elif pasajeros >= 8:
-        taxi = Taxi.objects.get(cant_personas=10) 
-    
+        taxi = Taxi.objects.get(cant_personas=10)
+
     origen_user = request.GET.get('origen',None)
     destino_user = request.GET.get('destino',None)
 
@@ -159,6 +186,8 @@ def acabar_viaje(request):
 
     # obtiene la diferencia del tiempo
     timediff = viaje_usuario.fecha_terminacion.timestamp() - viaje_usuario.fecha.timestamp()
+    diff = viaje_usuario.fecha_terminacion - viaje_usuario.fecha
+
     # calcula el costo total
     costo_total = math.floor(timediff * 0.8)
     # guarda el costo
@@ -167,8 +196,15 @@ def acabar_viaje(request):
     # guarda todos los cambios
     viaje_usuario.save()
 
+    days, seconds = diff.days, diff.seconds
+    hours = days * 24 + seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+
+    tiempo_total = str(minutes) + ":" + str(seconds)
     data = {
-        'costo' : costo_total
+        'costo' : costo_total,
+        'tiempo_total' : tiempo_total
     }
 
     return JsonResponse(data)
@@ -208,7 +244,7 @@ def taxi_viaje(request):
 @taxi_required
 def taxi_historial(request):
     context = {
-        'viajes' : Viaje.objects.filter(user_fk=request.user.id)
+        'viajes' : Viaje.objects.filter(taxi_fk=request.user.taxi)
     }
     return render(request,'main/taxi-historial.html',context)
 @taxi_required
@@ -221,6 +257,7 @@ def taxi_perfil(request):
         'user' : username
     }
     return render(request,'main/taxi-perfil.html',context)
+
 
 @login_required
 def perfil_actualiza(request):
@@ -242,3 +279,13 @@ def perfil_actualiza(request):
         'u_form' : u_form
     }  
     return render(request,'main/perfil-actualiza.html',context)
+
+class EncuestaListView(ListView):
+    model = Encuesta
+    template_name = 'main/taxi-encuesta.html'
+    context_object_name = 'encuestas'
+    ordering = ['-fecha']
+
+class EncuestaDetailView(DetailView):
+    model = Encuesta
+
