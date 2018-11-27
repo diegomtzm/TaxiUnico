@@ -16,7 +16,7 @@ from django.http import JsonResponse
 from datetime import datetime, timezone
 import math
 from .decorators import taxi_required
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserUpdateForm
 
 @login_required
 # Create your views here.
@@ -85,8 +85,9 @@ def perfil(request):
         username = request.user
 
     context = {
-        'user' : username
+        'user' : username,
     }
+    
     return render(request,'main/perfil.html',context)
 
 def encuesta(request):
@@ -257,6 +258,28 @@ def taxi_perfil(request):
     }
     return render(request,'main/taxi-perfil.html',context)
 
+
+@login_required
+def perfil_actualiza(request):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user
+        if request.method == 'POST':
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+
+            if u_form.is_valid():
+                u_form.save()
+                messages.success(request, f'Se han actualizado tus datos!')
+                return redirect('perfil-main')
+        else:
+            u_form = UserUpdateForm(instance=request.user)
+    
+    context = {
+        'user' : username,
+        'u_form' : u_form
+    }  
+    return render(request,'main/perfil-actualiza.html',context)
+
 class EncuestaListView(ListView):
     model = Encuesta
     template_name = 'main/taxi-encuesta.html'
@@ -265,3 +288,4 @@ class EncuestaListView(ListView):
 
 class EncuestaDetailView(DetailView):
     model = Encuesta
+
