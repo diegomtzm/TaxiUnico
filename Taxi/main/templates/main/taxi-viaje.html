@@ -43,7 +43,7 @@ function autoRefresh(map, pathCoords) {
     }
 
     setTimeout(function(){
-    acaba_viaje();
+window.location.href = "{% url 'taxi-historial' %}";
   }, timeToWait);
 
 }
@@ -110,7 +110,7 @@ function getDirections(map) {
                                 <h4>$<span id="costo">39.00</span></h4>
                             </div>
                         </div>
-        
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -143,7 +143,6 @@ function getDirections(map) {
         });
 
     });
-    $("#finalDelViaje").modal()
 
     function acaba_viaje() {
         $.ajax({

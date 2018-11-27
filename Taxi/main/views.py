@@ -27,12 +27,16 @@ def home(request):
 
     form = TaxiForm()
 
+
     context = {
         'user' : username,
         'api' : config.api_key,
         'taxista' : Taxi.objects.first(),
         'form' : form
     }
+    if (username.taxi):
+        return render(request, 'main/taxi-main.html', context)
+
     return render(request, 'main/index.html',context)
 '''
 VIAJES
@@ -87,7 +91,7 @@ def perfil(request):
     context = {
         'user' : username,
     }
-    
+
     return render(request,'main/perfil.html',context)
 
 def encuesta(request):
@@ -273,11 +277,11 @@ def perfil_actualiza(request):
                 return redirect('perfil-main')
         else:
             u_form = UserUpdateForm(instance=request.user)
-    
+
     context = {
         'user' : username,
         'u_form' : u_form
-    }  
+    }
     return render(request,'main/perfil-actualiza.html',context)
 
 class EncuestaListView(ListView):
@@ -288,4 +292,3 @@ class EncuestaListView(ListView):
 
 class EncuestaDetailView(DetailView):
     model = Encuesta
-
