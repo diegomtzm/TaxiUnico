@@ -18,4 +18,6 @@ urlpatterns = [
     path('taxi/viaje', views.taxi_viaje, name='taxi-viaje'),
     path('taxi/historial', views.taxi_historial, name='taxi-historial'),
     path('taxi/perfil', views.taxi_perfil, name='taxi-perfil'),
+
+    path('perfil/actualiza', views.perfil_actualiza, name='perfil-actualiza'),
 ]
