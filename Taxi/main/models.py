@@ -48,6 +48,8 @@ class Boleto(models.Model):
 class Encuesta(models.Model):
     taxi_fk = models.ForeignKey(Taxi,on_delete=models.CASCADE,related_name='taxi_encuesta')
     user_fk = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='user_encuesta')
-    pregunta1 = models.IntegerField(default=0)
-    pregunta2 = models.IntegerField(default=0)
-    pregunta3 = models.IntegerField(default=0)
+    fecha = models.DateTimeField(default=datetime.now, blank=True)
+    pregunta1 = models.CharField(max_length=200)
+    pregunta2 = models.CharField(max_length=200)
+    pregunta3 = models.CharField(max_length=200)
+    promedio = models.DecimalField(default=0,decimal_places=2,max_digits=100)
